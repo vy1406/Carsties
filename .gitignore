@@ -1,0 +1,31 @@
+# Build artifacts
+bin/
+obj/
+Debug/
+Release/
+
+# Visual Studio / Rider / VS Code
+.vs/
+.idea/
+.vscode/
+
+# Dependency caches
+packages/
+node_modules/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.cache
+
+# Logs & database
+logs/
+*.log
+sqlite.db
+sqlite3.db
+*.sqlite
+
+
+
+
