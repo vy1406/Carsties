@@ -10,6 +10,7 @@ Creating a migration:
 
 docker compose up -d
 docker compose down
+docker volume list
 
 ## .net commands
 dotnet watch
