@@ -13,3 +13,10 @@ docker compose down
 
 ## .net commands
 dotnet watch
+dotnet build
+
+# generate solution
+dotnet new webapi -o src/SearchService
+
+# add to main sln
+dotnet sln add src/SearchService
