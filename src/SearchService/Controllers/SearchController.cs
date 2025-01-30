@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Entities;
+using SearchService.RequestHelpers;
 
 namespace SearchService;
 
@@ -8,24 +9,43 @@ namespace SearchService;
 public class SearchController : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<Item>> SearchItems(
-        string searchTerm,
-        int pageNumber = 1,
-        int pageSize = 4
-    )
+    public async Task<ActionResult<Item>> SearchItems([FromQuery] SearchParams searchParams)
     {
 
-        var query = DB.PagedSearch<Item>();
+        var query = DB.PagedSearch<Item, Item>();
 
         query.Sort(x => x.Ascending(a => a.Make));
 
-        if (!string.IsNullOrEmpty(searchTerm))
+        if (!string.IsNullOrEmpty(searchParams.SearchTerm))
         {
-            query.Match(Search.Full, searchTerm).SortByTextScore();
+            query.Match(Search.Full, searchParams.SearchTerm).SortByTextScore();
         }
 
-        query.PageNumber(pageNumber);
-        query.PageSize(pageSize);
+        query = searchParams.FilterBy switch
+        {
+            "finished" => query.Match(x => x.AuctionEnd < DateTime.UtcNow),
+            "endingSoon" => query.Match(x => x.AuctionEnd < DateTime.UtcNow.AddHours(6)
+                && x.AuctionEnd > DateTime.UtcNow),
+            _ => query.Match(x => x.AuctionEnd > DateTime.UtcNow)
+        };
+
+        if (!string.IsNullOrEmpty(searchParams.Seller))
+        {
+            query.Match(x => x.Seller == searchParams.Seller);
+        }
+        if (!string.IsNullOrEmpty(searchParams.Winner))
+        {
+            query.Match(x => x.Winner == searchParams.Winner);
+        }
+        query = searchParams.OrderBy switch
+        {
+            "make" => query.Sort(x => x.Ascending(a => a.Make)),
+            "new" => query.Sort(x => x.Descending(a => a.CreatedAt)),
+            _ => query.Sort(x => x.Ascending(a => a.AuctionEnd))
+        };
+
+        query.PageNumber(searchParams.PageNumber);
+        query.PageSize(searchParams.PageSize);
 
         var result = await query.ExecuteAsync();
 
