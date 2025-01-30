@@ -14,13 +14,13 @@ var app = builder.Build();
 app.UseAuthorization();
 app.MapControllers();
 
-await DB.InitAsync("SearchDb", MongoClientSettings
-    .FromConnectionString(builder.Configuration.GetConnectionString("MongoDBConnection")));
-
-await DB.Index<Item>()
-    .Key(x => x.Make, KeyType.Text)
-    .Key(x => x.Model, KeyType.Text)
-    .Key(x => x.Color, KeyType.Text)
-    .CreateAsync();
+try
+{
+    await DbInitializer.InitDb(app);
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error initializing database: {ex.Message}");
+}
 
 app.Run();
