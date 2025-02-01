@@ -80,6 +80,8 @@ public class AuctionsController : ControllerBase
         auction.Item.Year = updateAuctionDto.Year ?? auction.Item.Year;
         auction.Item.Mileage = updateAuctionDto.Mileage ?? auction.Item.Mileage;
 
+        await _publishEndpoint.Publish(_mapper.Map<AuctionUpdated>(auction));
+
         var result = await _context.SaveChangesAsync() > 0;
 
         if (result) return Ok();
@@ -92,6 +94,8 @@ public class AuctionsController : ControllerBase
         var auction = await _context.Auctions.FindAsync(id);
 
         if (auction == null) return NotFound();
+
+        await _publishEndpoint.Publish<AuctionDeleted>(new { Id = auction.Id.ToString() });
 
         _context.Auctions.Remove(auction);
 

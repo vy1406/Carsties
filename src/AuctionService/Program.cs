@@ -23,6 +23,8 @@ builder.Services.AddMassTransit(
             o.UseBusOutbox();
         });
         x.AddConsumersFromNamespaceContaining<AuctionCreatedFaultConsumer>();
+        x.AddConsumersFromNamespaceContaining<AuctionUpdatedFaultConsumer>();
+        x.AddConsumersFromNamespaceContaining<AuctionDeletedFaultConsumer>();
         x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("auction", false));
         x.UsingRabbitMq((context, cfg) =>
         {
