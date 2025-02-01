@@ -1,5 +1,6 @@
 
 https://mongodb-entities.com/wiki/Get-Started.html
+https://docs.duendesoftware.com/identityserver/v7/quickstarts/0_overview/
 
 ## migration commands
 
@@ -18,6 +19,7 @@ docker compose down
 docker volume list
 
 ## .net commands
+
 dotnet watch
 dotnet build
 
@@ -38,3 +40,8 @@ web ui mngment:
 localhost:15672
 username: guest
 password: guest
+
+# Identity Server
+dotnet new install Duende.IdentityServer.Templates
+
+dotnet new isaspid -o src/IdentityService
