@@ -2,8 +2,9 @@
 https://mongodb-entities.com/wiki/Get-Started.html
 https://docs.duendesoftware.com/identityserver/v7/quickstarts/0_overview/
 
-## migration commands
 
+## migration commands
+ef is 8.0.3 version, but updated to 9.0.1 at some point.
 Creating a migration:
 -> Auction folder
 
@@ -17,6 +18,7 @@ Creating a migration:
 docker compose up -d
 docker compose down
 docker volume list
+dotnet list package --outdated
 
 ## .net commands
 
