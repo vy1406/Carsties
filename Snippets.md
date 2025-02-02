@@ -2,6 +2,7 @@
 https://mongodb-entities.com/wiki/Get-Started.html
 https://docs.duendesoftware.com/identityserver/v7/quickstarts/0_overview/
 https://microsoft.github.io/reverse-proxy/articles/getting-started.html
+https://github.com/whiskpo0/Carsties/tree/main/src
 
 ## migration commands
 ef is 8.0.3 version, but updated to 9.0.1 at some point.
