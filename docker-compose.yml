@@ -6,7 +6,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - /var/lib/postresql/data
+      - /var/lib/postgresql/data
   mongodb:
     image: mongo
     environment:
@@ -36,8 +36,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - RabbitMq__Host=rabbitmq
-      - RabbitMq__Username=admin
-      - RabbitMq__Password=admin
       - ConnectionStrings__DefaultConnection=Server=postgres:5432;User Id=postgres;Password=postgrespw;Database=auctions
       - IdentityServiceUrl=http://identity-svc
     ports:
