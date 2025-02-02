@@ -26,6 +26,8 @@ dotnet list package --outdated
 dotnet watch
 dotnet build
 
+# single docker file
+docker build -f src/AuctionService/Dockerfile -t testing123 .
 # generate solution
 dotnet new webapi -o src/SearchService
 

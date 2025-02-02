@@ -7,7 +7,7 @@ services:
       - 5432:5432
     volumes:
       - /var/lib/postresql/data
-  mongo:
+  mongodb:
     image: mongo
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
@@ -21,5 +21,51 @@ services:
     ports:
       - 5672:5672
       - 15672:15672 # for web management interface - guest@guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 2s
+      timeout: 3s
+      retries: 5
+      
+  auction-svc:
+    image: yvova88/auction-svc:latest
+    build:
+      context: .
+      dockerfile: src/AuctionService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - RabbitMq__Host=rabbitmq
+      - RabbitMq__Username=admin
+      - RabbitMq__Password=admin
+      - ConnectionStrings__DefaultConnection=Server=postgres:5432;User Id=postgres;Password=postgrespw;Database=auctions
+      - IdentityServiceUrl=http://identity-svc
+    ports:
+      - 7001:80
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_started
+
+  search-svc:
+    image: yvova88/search-svc:latest
+    build:
+      context: .
+      dockerfile: src/SearchService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - RabbitMq__Host=rabbitmq
+      - ConnectionStrings__MongoDBConnection=mongodb://root:mongopw@mongodb
+      - AuctionServiceUrl=http://auction-svc
+    ports:
+      - 7002:80
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+
 
 
