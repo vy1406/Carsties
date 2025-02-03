@@ -1,4 +1,10 @@
 
+# for client
+https://react-icons.github.io/react-icons/
+
+
+# for microservices
+
 https://mongodb-entities.com/wiki/Get-Started.html
 https://docs.duendesoftware.com/identityserver/v7/quickstarts/0_overview/
 https://microsoft.github.io/reverse-proxy/articles/getting-started.html
