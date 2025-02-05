@@ -1,3 +1,5 @@
+using AutoMapper;
+using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Entities;
@@ -9,8 +11,16 @@ namespace BiddingService;
 public class BidsController : ControllerBase
 
 {
+    private readonly IMapper _mapper;
+    private readonly IPublishEndpoint _publishEndpoint;
+
+    public BidsController(IMapper mapper, IPublishEndpoint publishEndpoint)
+    {
+        _mapper = mapper;
+        _publishEndpoint = publishEndpoint;
+    }
     [Authorize]
-    public async Task<ActionResult<Bid>> PlaceBid(string auctionId, int amount)
+    public async Task<ActionResult<BidDto>> PlaceBid(string auctionId, int amount)
     {
         var auction = await DB.Find<Auction>().OneAsync(auctionId);
 
@@ -60,17 +70,17 @@ public class BidsController : ControllerBase
 
         // await _publichEndpoint.Publish(_mappoer.Ma)
 
-        return Ok(bid);
+        return Ok(_mapper.Map<BidDto>(bid));
     }
 
     [HttpGet("{auctionId}")]
-    public async Task<ActionResult<List<Bid>>> GetBidsForAuction(string auctionId)
+    public async Task<ActionResult<List<BidDto>>> GetBidsForAuction(string auctionId)
     {
         var bids = await DB.Find<Bid>()
             .Match(a => a.AuctionId == auctionId)
             .Sort(b => b.Descending(a => a.BidTime))
             .ExecuteAsync();
 
-        return Ok(bids);
+        return Ok(bids.Select(_mapper.Map<BidDto>).ToList());
     }
 }
