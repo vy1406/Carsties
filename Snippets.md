@@ -4,6 +4,7 @@ https://react-icons.github.io/react-icons/
 https://authjs.dev/
 https://pixabay.com/
 
+you can upload images to cloudinary ( free of charge )
 # for microservices
 
 https://mongodb-entities.com/wiki/Get-Started.html
