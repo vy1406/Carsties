@@ -1,7 +1,7 @@
-using BiddingService;
+using AuctionService;
 using Grpc.Net.Client;
 
-namespace AuctionService;
+namespace BiddingService;
 
 public class GrpcAuctionClient
 {
@@ -13,14 +13,12 @@ public class GrpcAuctionClient
         _logger = logger;
         _config = config;
     }
+
     public Auction GetAuction(string id)
     {
-        _logger.LogInformation(" calling GRPC service");
-
+        _logger.LogInformation("Calling GRPC Service");
         var channel = GrpcChannel.ForAddress(_config["GrpcAuction"]);
-
         var client = new GrpcAuction.GrpcAuctionClient(channel);
-
         var request = new GetAuctionRequest { Id = id };
 
         try
@@ -33,11 +31,12 @@ public class GrpcAuctionClient
                 Seller = reply.Auction.Seller,
                 ReservePrice = reply.Auction.ReservePrice
             };
+
             return auction;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Coudnt call grpc server");
+            _logger.LogError(ex, "Could not call GRPC Server");
             return null;
         }
     }
