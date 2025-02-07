@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,9 +24,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //     });
 // });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("customPolicy", b =>
+    {
+        b.AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithOrigins(builder.Configuration["ClientApp"]);
+    });
+});
+
 var app = builder.Build();
 
 app.UseCors();
+
 app.MapReverseProxy();
 
 app.UseAuthentication();
