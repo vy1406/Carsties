@@ -58,3 +58,10 @@ password: guest
 dotnet new install Duende.IdentityServer.Templates
 
 dotnet new isaspid -o src/IdentityService
+
+
+# To run locally:
+
+-> docker compose up -d
+-> cd frontend/web-app && npm i && npm run dev
+-> localhost:3000
