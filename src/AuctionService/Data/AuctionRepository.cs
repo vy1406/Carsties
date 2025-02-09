@@ -26,8 +26,7 @@ public class AuctionRepository : IAuctionRepository
     {
         throw new NotImplementedException();
     }
-
-    public async Task<List<AuctionDto>> GetAllAuctionsAsync(string date)
+    public async Task<List<AuctionDto>> GetAuctionsAsync(string date)
     {
         var query = _context.Auctions.OrderBy(x => x.Item.Make).AsQueryable();
 
@@ -35,6 +34,7 @@ public class AuctionRepository : IAuctionRepository
         {
             query = query.Where(x => x.UpdatedAt.CompareTo(DateTime.Parse(date).ToUniversalTime()) > 0);
         }
+
         return await query.ProjectTo<AuctionDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
 

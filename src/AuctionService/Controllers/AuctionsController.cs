@@ -1,11 +1,9 @@
 using AuctionService.Data;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Contracts;
 using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AuctionService;
 
@@ -27,17 +25,17 @@ public class AuctionsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<AuctionDto>>> GetAllAuctions(string date)
     {
-        return await _repo.GetAllAuctionsAsync(date);
+        return await _repo.GetAuctionsAsync(date);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<AuctionDto>> GetAuctionById(Guid id)
     {
-        var auction = await _repo.GetAuctionEntityById(id);
+        var auction = await _repo.GetAuctionByIdAsync(id);
 
         if (auction == null) return NotFound();
 
-        return Ok(auction);
+        return auction;
     }
 
     [Authorize]
