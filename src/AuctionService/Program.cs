@@ -70,3 +70,5 @@ catch (Exception ex)
     Console.WriteLine(ex.Message);
 }
 app.Run();
+
+public partial class Program { };
