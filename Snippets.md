@@ -56,7 +56,6 @@ password: guest
 
 # Identity Server
 dotnet new install Duende.IdentityServer.Templates
-
 dotnet new isaspid -o src/IdentityService
 
 
@@ -65,3 +64,7 @@ dotnet new isaspid -o src/IdentityService
 -> docker compose up -d
 -> cd frontend/web-app && npm i && npm run dev
 -> localhost:3000
+
+Logins:
+username: alice / bob
+password: Pass123$
